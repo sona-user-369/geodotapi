@@ -19,9 +19,10 @@ class User(Base):
     contact = relationship('Contact', back_populates="user")
     token = relationship('Token', back_populates='user')
 
-    def __init__(self, username, con_id):
+    def __init__(self, username, con_id, password):
         self.username = username
         self.con_id = con_id
+        self.password = password
 
     def update(self, data):
         self.username = data.username
