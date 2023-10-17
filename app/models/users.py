@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import String, Column, Boolean, Table, ForeignKey
+from sqlalchemy import String, Column, Boolean, Table, ForeignKey, Text
 from app.db import Base
 from app.utils import helpers
 from sqlalchemy.orm import relationship
@@ -17,6 +17,7 @@ class User(Base):
     active = Column(Boolean, nullable=False, default=True)
     contacts = relationship('Contact', back_populates='users', secondary='user_contacts')
     contact = relationship('Contact', back_populates="user")
+    token = relationship('Token', back_populates='user')
 
     def __init__(self, username, con_id):
         self.username = username
@@ -33,3 +34,15 @@ user_contact = Table(
     Column('user_id', ForeignKey('users.id'), primary_key=True),
     Column('contact_id', ForeignKey('contacts.id'), primary_key=True),
 )
+
+
+class Token(Base):
+    __tablename__ = 'tokens'
+
+    user_id = Column(ForeignKey('users.id', ondelete='CASCADE'))
+    user = relationship('User', back_populates='token')
+    key = Column(Text, nullable=False)
+
+    def __init__(self, user_id, key):
+        self.user_id = user_id
+        self.key = key
