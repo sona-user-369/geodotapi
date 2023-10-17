@@ -2,6 +2,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+# import models
+
+from models.users import User, UserContact
+from models.contacts import Contact
+
 from . import config
 
 DATABASE_USERNAME = config.DATABASE_USERNAME

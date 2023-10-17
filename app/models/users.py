@@ -18,4 +18,4 @@ class UserContact(Base):
     __tablename__ = 'user_contacts'
 
     user_id = relationship('User', back_populates='contacts')
-    match_id = relationship('Contact', back_populates='')
+    match_id = relationship('Contact', back_populates='users')
