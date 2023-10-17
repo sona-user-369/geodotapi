@@ -9,7 +9,7 @@ app.include_router(users_router.router)
 app.include_router(contacts_router.router)
 
 
-socket_manager = SocketManager(app=app)
+sio = SocketManager(app=app)
 
 origins = ["*"]
 
@@ -20,3 +20,4 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+

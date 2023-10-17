@@ -1,8 +1,9 @@
-from pydantic import BaseModel
+import uuid
+
+from pydantic import BaseModel, ConfigDict
 from pydantic.v1.dataclasses import dataclass
 from fastapi import Form
-from typing import List
-from . import contacts
+from typing import List, Union
 
 
 @dataclass
@@ -15,11 +16,23 @@ class UserSchemeCreate(UserSchemeBase):
     password: str = Form(None)
 
 
-@dataclass
-class UserScheme(UserSchemeBase):
-    id: str
-    active: str
-    contacts: List[contacts.ContactScheme]
+class UserSchemeFree(BaseModel):
+    username: str
+    active: bool
+
+
+class ContactScheme(BaseModel):
+    id: uuid.UUID
+    user: UserSchemeFree
+    model_config = ConfigDict(from_attributes=True)
+
+
+class UserScheme(BaseModel):
+    id: uuid.UUID
+    username: str
+    active: bool
+    contacts: List[ContactScheme] = None
+    model_config = ConfigDict(from_attributes=True)
 
 
 @dataclass

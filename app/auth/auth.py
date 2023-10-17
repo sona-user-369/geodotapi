@@ -12,7 +12,7 @@ from app import db as database
 oauth_scheme = OAuth2PasswordBearer(tokenUrl='users/login')
 
 
-def get_current_user(token: Annotated[str, Depends(oauth_scheme)], db: Session = Depends(database.get_db())):
+def get_current_user(token: Annotated[str, Depends(oauth_scheme)], db: Session = Depends(database.get_db)):
     username = None
     try:
         decoded_data = decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
