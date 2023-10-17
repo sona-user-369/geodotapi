@@ -3,7 +3,7 @@ from sqlalchemy.dialects.mysql import BINARY
 from sqlalchemy.types import TypeDecorator
 from passlib.context import CryptContext
 import os
-from . import  settings
+from app import settings
 
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 

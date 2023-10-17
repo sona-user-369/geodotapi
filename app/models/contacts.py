@@ -5,8 +5,12 @@ from sqlalchemy.orm import relationship
 from . import users
 
 
-class Contact(users.User):
+class Contact(Base):
     __tablename__ = 'contacts'
-    contacts = None
-    user = relationship('users.User', back_populates='contacts', secondary='users.UserContact')
+
+    id = Column(helpers.UUID, unique=True, primary_key=True)
+    users = relationship('User', back_populates='contacts', secondary='user_contacts')
+
+    def __init__(self, user_id):
+        self.id = user_id
 
