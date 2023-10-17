@@ -22,4 +22,13 @@ class UserScheme(UserSchemeBase):
     contacts: List[contacts.ContactScheme]
 
 
+@dataclass
+class Auth:
+    username: str = Form()
+    password: str = Form()
 
+
+class TokenScheme(BaseModel):
+    token: str
+    type: str
+    user: UserScheme

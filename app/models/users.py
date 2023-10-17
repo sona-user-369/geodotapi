@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import String, Column, Boolean, Table, ForeignKey, Text
+from sqlalchemy import String, Column, Boolean, Table, ForeignKey, Text, Integer
 from app.db import Base
 from app.utils import helpers
 from sqlalchemy.orm import relationship
@@ -13,7 +13,7 @@ class User(Base):
     id = Column(helpers.UUID, primary_key=True, nullable=False, default=uuid.uuid4)
     username = Column(String(60), nullable=False, unique=True)
     password = Column(String(20), nullable=False)
-    con_id = Column(String(40),  nullable=False, unique=True)
+    con_id = Column(String(40), nullable=False, unique=True)
     active = Column(Boolean, nullable=False, default=True)
     contacts = relationship('Contact', back_populates='users', secondary='user_contacts')
     contact = relationship('Contact', back_populates="user")
@@ -29,20 +29,27 @@ class User(Base):
         self.con_id = data.con_id
 
 
-user_contact = Table(
-    "user_contacts",
-    Base.metadata,
-    Column('user_id', ForeignKey('users.id'), primary_key=True),
-    Column('contact_id', ForeignKey('contacts.id'), primary_key=True),
-)
+class UserContact(Base):
+    __tablename__ = 'user_contacts'
+    user_id = Column(ForeignKey('users.id'), primary_key=True)
+    contact_id = Column(ForeignKey('contacts.id'), primary_key=True)
+    enable = Column(Boolean, default=False, nullable=False)
+
+    def __init__(self, user_id, contact_id):
+        self.user_id = user_id
+        self.contact_id = contact_id
+
+    def set_enable(self, value):
+        self.enable = value
 
 
 class Token(Base):
     __tablename__ = 'tokens'
 
-    user_id = Column(ForeignKey('users.id', ondelete='CASCADE'))
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(ForeignKey('users.id', ondelete='CASCADE'),)
     user = relationship('User', back_populates='token')
-    key = Column(Text, nullable=False)
+    key = Column(Text, nullable=False,)
 
     def __init__(self, user_id, key):
         self.user_id = user_id

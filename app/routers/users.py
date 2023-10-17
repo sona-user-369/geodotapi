@@ -1,10 +1,10 @@
 from fastapi import APIRouter, status, Response, Depends
 from app.schemas import users as userschema
-from app.services import  users as userservice
+from app.services import users as userservice
 from typing import Annotated
-from app import  db
+from app import db
 from sqlalchemy.orm import Session
-from app import auth
+from app.auth import auth
 
 
 router = APIRouter(tags=["Users"], prefix="/users")
@@ -17,14 +17,16 @@ async def register(request: Annotated[userschema.UserSchemeCreate, Depends()], d
 
 
 @router.post("/login", status_code=status.HTTP_200_OK, response_model= userschema.TokenScheme)
-async def login(request: Annotated[userschema.Auth, Depends()], db: Session = db.get_db()):
-    token: str
-    user = await auth.authenticate(request, db)
+async def login(request: Annotated[userschema.Auth, Depends()], db: Session = db.get_db):
+    token = None
+    user = await auth.authenticate_user(request, db)
     if user:
-        token = await userservice.get_token(user)
+        token = await auth.create_access_token({"sub": user.username}, user.id, db)
 
     return {
         "token": token,
         "type": "Bearer",
         "user": user
     }
+
+

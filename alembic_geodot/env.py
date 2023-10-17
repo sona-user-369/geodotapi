@@ -16,7 +16,7 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 from app.models.contacts import Contact
-from app.models.users import User, user_contact
+from app.models.users import User, UserContact
 
 # add your model's MetaData object here
 # for 'autogenerate' support
