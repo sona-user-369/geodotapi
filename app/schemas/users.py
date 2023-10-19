@@ -8,12 +8,12 @@ from typing import List, Union
 
 @dataclass
 class UserSchemeBase:
-    username: str = Form(None)
+    username: str = Form()
 
 
 @dataclass
 class UserSchemeCreate(UserSchemeBase):
-    password: str = Form(None)
+    password: str = Form()
 
 
 class UserSchemeFree(BaseModel):
@@ -45,3 +45,4 @@ class TokenScheme(BaseModel):
     token: str
     type: str
     user: UserScheme
+    model_config = ConfigDict(from_attributes=True)

@@ -8,6 +8,7 @@ from jose.jwt import encode, decode
 from app.models.users import Token
 from typing import Annotated
 from app import db as database
+from app.utils import helpers
 
 oauth_scheme = OAuth2PasswordBearer(tokenUrl='users/login')
 
@@ -46,7 +47,7 @@ async def authenticate_user(data, db: Session):
         status_code=status.HTTP_401_UNAUTHORIZED
     )
     user = db.query(usermodel.User).filter(usermodel.User.username == data.username).first()
-    if not user:
+    if not user or not helpers.check_pass(data.password, user.password):
         raise authenticate_exception
 
 

@@ -12,7 +12,7 @@ class User(Base):
 
     id = Column(helpers.UUID, primary_key=True, nullable=False, default=uuid.uuid4)
     username = Column(String(60), nullable=False, unique=True)
-    password = Column(String(20), nullable=False)
+    password = Column(Text, nullable=False)
     con_id = Column(String(40), nullable=False, unique=True)
     active = Column(Boolean, nullable=False, default=True)
     contacts = relationship('Contact', back_populates='users', secondary='user_contacts')

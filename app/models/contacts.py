@@ -8,7 +8,7 @@ from . import users
 class Contact(Base):
     __tablename__ = 'contacts'
 
-    id = Column(ForeignKey("users.id", ondelete='PROTECT'), primary_key=True)
+    id = Column(ForeignKey("users.id", ondelete='NO ACTION'), primary_key=True)
     users = relationship('User', back_populates='contacts', secondary='user_contacts')
     user = relationship('User', back_populates="contact")
 
