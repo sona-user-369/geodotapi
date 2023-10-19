@@ -1,9 +1,11 @@
 import uuid
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_validator, validator
 from pydantic.v1.dataclasses import dataclass
 from fastapi import Form
 from typing import List, Union
+from app import db
+from app.models import  users
 
 
 @dataclass
@@ -14,6 +16,18 @@ class UserSchemeBase:
 @dataclass
 class UserSchemeCreate(UserSchemeBase):
     password: str = Form()
+
+    @validator('username', pre=True, always=True)
+    def validate_username(cls, value):
+        print(value)
+        database = db.get_db()
+        for d in database:
+            database = d
+        user = database.query(users.User).filter(users.User.username == value).first()
+        if user:
+            raise ValueError('user with this username already exist')
+        print(value)
+        return value
 
 
 class UserSchemeFree(BaseModel):
