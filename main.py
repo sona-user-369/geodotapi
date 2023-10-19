@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.routers import users as users_router
 from app.routers import contacts as contacts_router
 
-app = FastAPI()
+app = FastAPI(title="GeoDot")
 app.include_router(users_router.router)
 app.include_router(contacts_router.router)
 
