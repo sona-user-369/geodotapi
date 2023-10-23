@@ -51,6 +51,7 @@ class UserScheme(BaseModel):
     id: uuid.UUID
     username: str
     active: bool
+    con_id: str
     contacts: List[ContactScheme] = None
     model_config = ConfigDict(from_attributes=True)
 
