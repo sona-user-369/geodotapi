@@ -54,3 +54,4 @@ class Token(Base):
     def __init__(self, user_id, key):
         self.user_id = user_id
         self.key = key
+

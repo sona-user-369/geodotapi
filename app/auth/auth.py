@@ -41,6 +41,16 @@ def get_current_user(token: Annotated[str, Depends(oauth_scheme)], db: Session =
     return user
 
 
+async def get_token(token=Depends(oauth_scheme), db: Session = Depends(database.get_db)):
+    db_token = db.query(Token).filter(Token.key == token).first()
+    if not db_token:
+        raise HTTPException(
+            detail='Token is invalid',
+            status_code=status.HTTP_406_NOT_ACCEPTABLE
+        )
+    return token
+
+
 async def authenticate_user(data, db: Session):
     authenticate_exception = HTTPException(
         detail="unable to authenticate this user",

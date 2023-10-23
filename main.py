@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from fastapi_socketio import SocketManager
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic.v1 import ValidationError
+from fastapi.responses import JSONResponse
+
 from app.routers import users as users_router
 from app.routers import contacts as contacts_router
 
@@ -21,3 +24,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@app.exception_handler(ValidationError)
+async def validation_exception_handler(request, exc):
+    # print(exc.json())
+    print(exc.errors)
+    errors = []
+    for error in exc.errors():
+        errors.append({
+            "loc": error["loc"],
+            "msg": error["msg"],
+            "type": error["type"]
+        })
+    return JSONResponse(content={"errors": errors}, status_code=400)
+#

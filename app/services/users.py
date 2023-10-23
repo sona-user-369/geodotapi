@@ -1,7 +1,7 @@
 import random
 import string
 from sqlalchemy.orm import Session
-from app.models.users import User
+from app.models.users import User, Token
 from app.models.contacts import Contact
 from fastapi import HTTPException, status
 from app.utils import  helpers
@@ -27,3 +27,7 @@ async def register_user(user, db: Session):
     return user_object
 
 
+async def logout_user(token, db: Session):
+    token_object = db.query(Token).filter(Token.key == token).delete()
+    db.commit()
+    db.refresh(token_object)

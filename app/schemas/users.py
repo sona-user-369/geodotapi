@@ -35,10 +35,16 @@ class UserSchemeFree(BaseModel):
     active: bool
 
 
+class ContactUserScheme(BaseModel):
+    contact_id: uuid.UUID
+    enable: bool
+
+
 class ContactScheme(BaseModel):
     id: uuid.UUID
     user: UserSchemeFree
     model_config = ConfigDict(from_attributes=True)
+    state: ContactUserScheme
 
 
 class UserScheme(BaseModel):
@@ -47,6 +53,8 @@ class UserScheme(BaseModel):
     active: bool
     contacts: List[ContactScheme] = None
     model_config = ConfigDict(from_attributes=True)
+
+
 
 
 @dataclass
@@ -60,3 +68,4 @@ class TokenScheme(BaseModel):
     type: str
     user: UserScheme
     model_config = ConfigDict(from_attributes=True)
+

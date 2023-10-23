@@ -1,3 +1,6 @@
+import uuid
+from typing import List
+
 from sqlalchemy.orm import Session
 from app.models.users import User, UserContact
 from app.models.contacts import Contact
@@ -12,6 +15,21 @@ async def get_contact(contact_id, db):
         db.commit()
         db.refresh(contact)
     return contact
+
+
+async def get_contacts(user_id: uuid.UUID, db: Session) -> List:
+    user = db.query(User).filter(User.id == user_id)
+    # contacts = db.query(Contact).filter(Contact)
+    user_contact: List[UserContact] = db.query(UserContact).filter(UserContact.user_id == user_id).all()
+    contacts = list(map(lambda x:
+                        {
+                            "id": x.contact_id,
+                            "user": user,
+                            "state": x,
+                        }
+                        , user_contact))
+
+    return contacts
 
 
 async def verify_contact(con_id, db):
@@ -42,7 +60,8 @@ async def add_contact(con_id, user_id, db: Session):
 
 
 async def confirm_match(user_id, contact_id, db: Session):
-    user_contact: UserContact = db.query(UserContact).filter(UserContact.user_id == user_id, UserContact.contact_id == contact_id)
+    user_contact: UserContact = db.query(UserContact).filter(UserContact.user_id == user_id,
+                                                             UserContact.contact_id == contact_id)
     user_contact.set_enable(True)
     db.commit()
     db.refresh(user_contact)

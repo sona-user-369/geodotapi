@@ -31,3 +31,8 @@ async def login(request: Annotated[userschema.Auth, Depends()], db: Session = De
     }
 
 
+@router.post('/logout', status_code=status.HTTP_200_OK)
+async def logout(token=Depends(auth.get_token), db: Session = Depends(db.get_db)):
+    await userservice.logout_user(token, db)
+
+
