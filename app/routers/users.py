@@ -22,6 +22,7 @@ async def login(request: Annotated[userschema.Auth, Depends()], db: Session = De
     user = await auth.authenticate_user(request, db)
     if user:
         token = await auth.create_access_token({"sub": user.username}, user.id, db)
+        print(token)
 
     return {
         "token": token,

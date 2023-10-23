@@ -50,10 +50,12 @@ async def authenticate_user(data, db: Session):
     if not user or not helpers.check_pass(user.password, data.password):
         raise authenticate_exception
 
+    return user
+
 
 async def create_access_token(data: dict, user_id: str, db: Session):
     data_copy = data.copy()
-    encoded_data = encode(data_copy, settings.SECRET_KEY, algorithm=[settings.ALGORITHM])
+    encoded_data = encode(data_copy, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
     object_token = Token(
         user_id=user_id,
         key=encoded_data
@@ -62,4 +64,5 @@ async def create_access_token(data: dict, user_id: str, db: Session):
     db.add(object_token)
     db.commit()
     db.refresh(object_token)
+
     return encoded_data
