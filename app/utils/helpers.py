@@ -34,6 +34,8 @@ def crypt_pass(password):
 
 
 def check_pass(checker, password):
+    """checker: the hash password,
+    password: password not hashed"""
     return pwd_context.verify(password, checker)
 
 

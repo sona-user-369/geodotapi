@@ -47,7 +47,7 @@ async def authenticate_user(data, db: Session):
         status_code=status.HTTP_401_UNAUTHORIZED
     )
     user = db.query(usermodel.User).filter(usermodel.User.username == data.username).first()
-    if not user or not helpers.check_pass(data.password, user.password):
+    if not user or not helpers.check_pass(user.password, data.password):
         raise authenticate_exception
 
 
