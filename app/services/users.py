@@ -31,3 +31,4 @@ async def logout_user(token, db: Session):
     token_object = db.query(Token).filter(Token.key == token).delete()
     db.commit()
     db.refresh(token_object)
+
