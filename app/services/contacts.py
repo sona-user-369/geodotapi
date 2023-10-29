@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from app.models.users import User, UserContact
 from app.models.contacts import Contact
 from fastapi import HTTPException, status
+from ..utils.helpers import cache
 
 
 async def get_contact(contact_id, db):
@@ -26,6 +27,7 @@ async def get_contacts(user_id: uuid.UUID, db: Session) -> List:
                             "id": x.contact_id,
                             "user": user,
                             "state": x,
+                            "online": True if cache.get(str(x.contact_id)) else False
                         }
                         , user_contact))
 

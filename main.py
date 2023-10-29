@@ -11,10 +11,10 @@ app = FastAPI(title="GeoDot")
 app.include_router(users_router.router)
 app.include_router(contacts_router.router)
 
-
 sio = SocketManager(app=app)
 
 origins = ["*"]
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -38,3 +38,7 @@ async def validation_exception_handler(request, exc):
         })
     return JSONResponse(content={"errors": errors}, status_code=400)
 #
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=3000)

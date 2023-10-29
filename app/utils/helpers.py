@@ -4,8 +4,13 @@ from sqlalchemy.types import TypeDecorator
 from passlib.context import CryptContext
 import os
 from app import settings
+from cachetools import TTLCache
+
+cache = TTLCache(maxsize=100, ttl=300)
 
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
+
+
 
 
 # utils for db

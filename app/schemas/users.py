@@ -43,8 +43,8 @@ class ContactUserScheme(BaseModel):
 class ContactScheme(BaseModel):
     id: uuid.UUID
     user: UserSchemeFree
-    model_config = ConfigDict(from_attributes=True)
     state: ContactUserScheme
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UserScheme(BaseModel):
